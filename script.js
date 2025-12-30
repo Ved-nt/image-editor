@@ -59,8 +59,13 @@ const imageCanvas = document.querySelector("#image-canvas")
 const imgInput = document.querySelector("#image-input")
 const canvasCtx = imageCanvas.getContext("2d");
 const resetButton = document.querySelector("#reset-btn");
+const downloadButton = document.querySelector("#download-btn");
+const presetsContainer = document.querySelector(".presets")
+
 let file = null;
 let image=null;
+
+
 
 const filterContainers = document.querySelector(".filters")
 
@@ -202,4 +207,187 @@ resetButton.addEventListener("click", () => {
 
     filterContainers.innerHTML=" ";
     createFilters();
+})
+
+downloadButton.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.download="edited-image.png";//a tag will not try to open anything instead it will download that is present in its link
+    link.href=imageCanvas.toDataURL();//anything that is present in imageCanvas will be converted to URL and it will be set in href
+    link.click();//when we click on the a tag it will be donwloaded
+})
+
+const presets = {
+    normal: {
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 0,
+        sepia: 0,
+        opacity: 100,
+        invert: 0,
+    },
+
+    drama: {
+        brightness: 105,
+        contrast: 140,
+        saturation: 125,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 0,
+        sepia: 5,
+        opacity: 100,
+        invert: 0,
+    },
+
+    vintage: {
+        brightness: 105,
+        contrast: 85,
+        saturation: 75,
+        hueRotation: 8,
+        blur: 1,
+        grayscale: 5,
+        sepia: 45,
+        opacity: 100,
+        invert: 0,
+    },
+
+    oldschool: {
+        brightness: 95,
+        contrast: 85,
+        saturation: 70,
+        hueRotation: 5,
+        blur: 1,
+        grayscale: 20,
+        sepia: 45,
+        opacity: 100,
+        invert: 0,
+    },
+
+    blackAndWhite: {
+        brightness: 100,
+        contrast: 120,
+        saturation: 0,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 100,
+        sepia: 0,
+        opacity: 100,
+        invert: 0,
+    },
+
+    cinematic: {
+        brightness: 95,
+        contrast: 130,
+        saturation: 110,
+        hueRotation: 350,
+        blur: 0,
+        grayscale: 0,
+        sepia: 5,
+        opacity: 100,
+        invert: 0,
+    },
+
+    faded: {
+        brightness: 115,
+        contrast: 80,
+        saturation: 85,
+        hueRotation: 0,
+        blur: 0,
+        grayscale: 5,
+        sepia: 10,
+        opacity: 100,
+        invert: 0,
+    },
+
+    cool: {
+        brightness: 105,
+        contrast: 110,
+        saturation: 115,
+        hueRotation: 190,
+        blur: 0,
+        grayscale: 0,
+        sepia: 0,
+        opacity: 100,
+        invert: 0,
+    },
+
+    warm: {
+        brightness: 110,
+        contrast: 105,
+        saturation: 120,
+        hueRotation: 15,
+        blur: 0,
+        grayscale: 0,
+        sepia: 15,
+        opacity: 100,
+        invert: 0,
+    },
+
+    cyberpunk: {
+        brightness: 110,
+        contrast: 145,
+        saturation: 160,
+        hueRotation: 270, // purple / neon shift
+        blur: 0,
+        grayscale: 0,
+        sepia: 0,
+        opacity: 100,
+        invert: 0,
+    },
+
+    softGlow: {
+        brightness: 120,
+        contrast: 90,
+        saturation: 110,
+        hueRotation: 0,
+        blur: 3, // glow effect
+        grayscale: 0,
+        sepia: 5,
+        opacity: 100,
+        invert: 0,
+    },
+
+    noir: {
+        brightness: 90,
+        contrast: 160,
+        saturation: 0,
+        hueRotation: 0,
+        blur: 1,
+        grayscale: 100,
+        sepia: 0,
+        opacity: 100,
+        invert: 0,
+    },
+    retropop: {
+        brightness: 115,
+        contrast: 135,
+        saturation: 150,
+        hueRotation: 20,   // warm retro color shift
+        blur: 0,
+        grayscale: 0,
+        sepia: 10,
+        opacity: 100,
+        invert: 0,
+    }
+};
+
+Object.keys(presets).forEach(presetName => {
+    const presetButton = document.createElement("button");
+    presetButton.classList.add("btn");
+    presetButton.innerText=presetName;
+    presetsContainer.appendChild(presetButton);
+
+    presetButton.addEventListener("click", ()=>{
+        const preset = presets[presetName];
+
+        Object.keys(preset).forEach(filterName => {
+            filters[filterName].value=preset[filterName];
+        })
+
+        applyFilters();
+        filterContainers.innerHTML = "";
+        createFilters();
+    })
 })
